@@ -1,0 +1,32 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+    }
+    plugins {
+        id 'com.axelor.app' version '8.0.+'
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        ivy {
+            name = "Node.js"
+            setUrl("https://nodejs.org/dist/")
+            patternLayout {
+                artifact("v[revision]/[artifact](-v[revision]-[classifier]).[ext]")
+            }
+            metadataSources {
+                artifact()
+            }
+            content {
+                includeModule("org.nodejs", "node")
+            }
+        }
+    }
+}
+
+rootProject.name = 'axelor-demo'
+
+// Include modules
+//include 'modules:currency-rates'
