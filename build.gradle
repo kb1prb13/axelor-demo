@@ -29,5 +29,5 @@ allprojects {
 
 dependencies {
     // add dependencies
-//    implementation project(':modules:currency-rates')
+    implementation project(':modules:currency-rates')
 }
