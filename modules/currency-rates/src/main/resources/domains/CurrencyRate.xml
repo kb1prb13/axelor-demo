@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://axelor.com/xml/ns/domain-models https://axelor.com/xml/ns/domain-models/domain-models_5.1.xsd">
+
+    <module name="puller" package="com.axelor.currencyRates.db"/>
+    <entity name="CurrencyRate" table="custom_currency_rate">
+        <string name="code" required="true"/>
+        <string name="name" required="true"/>
+        <integer name="nominal" required="true"/>
+        <decimal name="rate" required="true"/>
+        <date name="pullDate" required="true"/>
+        <unique-constraint name="currency_rate_unique_code_date" columns="code,pullDate"/>
+    </entity>
+
+</domain-models>
