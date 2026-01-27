@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://axelor.com/xml/ns/object-views https://axelor.com/xml/ns/object-views/object-views_8.0.xsd">
+
+    <grid title="Currency rate" name="currency-rate-grid" model="com.axelor.currencyRates.db.CurrencyRate">
+        <toolbar>
+            <button name="refreshRates" title="Update from NBKR"
+                    onClick="com.axelor.currencyRates.web.CurrencyRatesController:refreshRates"/>
+        </toolbar>
+        <field name="pullDate"/>
+        <field name="code"/>
+        <field name="name"/>
+        <field name="nominal"/>
+        <field name="rate"/>
+    </grid>
+
+    <form name="currency-rate-form" model="com.axelor.currencyRates.db.CurrencyRate" title="Currency rate">
+        <panel title="Currency Rate">
+            <field name="pullDate"/>
+            <field name="code"/>
+            <field name="name"/>
+            <field name="nominal"/>
+            <field name="rate"/>
+        </panel>
+    </form>
+
+    <action-view name="currency-rate-action" model="com.axelor.currencyRates.db.CurrencyRate" title="Currency Rates">
+        <view type="grid" name="currency-rate-grid"/>
+        <view type="form" name="currency-rate-form"/>
+    </action-view>
+
+    <menuitem name="menu-currency-rate-root" title="Update Currency Rates" order="-90"
+              icon="dollar" icon-background="green"/>
+    <menuitem name="menu-currency-rates" parent="menu-currency-rate-root"
+              title="NBKR Rates" action="currency-rate-action" order="10"/>
+
+</object-views>
