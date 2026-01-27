@@ -7,7 +7,6 @@ package com.axelor.currencyRates.service;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
-import dev.resteasy.guice.RequestScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +17,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
-@RequestScoped
 @Singleton
 public class CurrencyRatesPullerService {
 
@@ -50,7 +48,7 @@ public class CurrencyRatesPullerService {
                 throw new IllegalStateException(
                         "NBKR responded with status " + response.statusCode() + " for " + CurrencyRatesPullerService.NBKR_DAILY_URL);
             }
-            LOG.info("NBKR daily currency rates returned {}", response.body());
+
             return response.body();
         } catch (Exception ex) {
             throw new IllegalStateException("Failed to fetch NBKR daily rates", ex);
