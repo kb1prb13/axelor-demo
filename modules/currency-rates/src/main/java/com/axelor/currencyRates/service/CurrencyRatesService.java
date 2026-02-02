@@ -7,8 +7,8 @@ package com.axelor.currencyRates.service;
 import com.axelor.currencyRates.db.CurrencyRate;
 import com.axelor.currencyRates.db.repo.CurrencyRateRepository;
 import com.axelor.currencyRates.util.CurrencyRatesParser.CurrencyRateImportResult;
-import com.axelor.currencyRates.util.CurrencyRatesParser.ParsedRates;
-import com.axelor.currencyRates.util.CurrencyRatesParser.RateItem;
+import com.axelor.currencyRates.util.pojo.CurrencyRates;
+import com.axelor.currencyRates.util.pojo.Rates;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
@@ -31,17 +31,17 @@ public class CurrencyRatesService {
 
     @Transactional
     public CurrencyRateImportResult insertDailyRates(String xml) {
-        ParsedRates parsedRates = parseRates(xml);
+        CurrencyRates parsedRates = parseRates(xml);
 
         int created = 0;
         int updated = 0;
 
-        for (int i = 0; i < parsedRates.items().size(); i++) {
-            RateItem item = parsedRates.items().get(i);
+        for (int i = 0; i < parsedRates.getCurrencies().size(); i++) {
+            Rates item = parsedRates.getCurrencies().get(i);
             CurrencyRate existing =
                     currencyRateRepository
                             .all()
-                            .filter("self.code = ?1 AND self.pullDate = ?2", item.code(), item.date())
+                            .filter("self.code = ?1 AND self.pullDate = ?2", item.getIsoCode(), item.getPullDate())
                             .fetchOne();
 
             if (existing == null) {
@@ -51,21 +51,21 @@ public class CurrencyRatesService {
                 updated++;
             }
 
-            existing.setCode(item.code());
-            existing.setName(item.name());
-            existing.setNominal(item.nominal());
-            existing.setRate(item.rate());
-            existing.setPullDate(item.date());
+            existing.setCode(item.getIsoCode());
+            existing.setName(item.getName());
+            existing.setNominal(item.getNominal());
+            existing.setRate(item.getRate());
+            existing.setPullDate(item.getPullDate());
             currencyRateRepository.save(existing);
         }
 
         LOG.info(
                 "NBKR rates processed: total={}, created={}, updated={}, date={}",
-                parsedRates.items().size(),
+                parsedRates.getCurrencies().size(),
                 created,
                 updated,
-                parsedRates.rateDate());
+                parsedRates.getDate());
 
-        return new CurrencyRateImportResult(parsedRates.items().size(), created, updated, parsedRates.rateDate());
+        return new CurrencyRateImportResult(parsedRates.getCurrencies().size(), created, updated, parsedRates.getDate());
     }
 }
